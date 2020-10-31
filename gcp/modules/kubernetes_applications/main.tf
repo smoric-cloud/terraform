@@ -6,15 +6,6 @@ terraform {
   }
 }
 
-provider "kubernetes" {
-  load_config_file = false
-
-  host     = var.kubernetes_cluster_host
-  username = var.kubernetes_cluster_username
-  password = var.kubernetes_cluster_password
-  insecure=true
-}
-
 resource "kubernetes_deployment" "application" {
   metadata {
     name = var.application_name

@@ -7,12 +7,23 @@ terraform {
     google = {
       source = "hashicorp/google"
     }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
   }
 }
 
 provider "google" {
   project = var.project_id
   region  = var.region
+}
+
+provider "kubernetes" {
+  load_config_file = false
+  host     = module.kubernetes_cluster.kubernetes_cluster_host
+  username = module.kubernetes_cluster.kubernetes_cluster_username
+  password = module.kubernetes_cluster.kubernetes_cluster_password
+  insecure=true
 }
 
 module "network" {
@@ -32,14 +43,18 @@ module "kubernetes_cluster" {
 
 module "kubernetes_applications" {
   source = "./modules/kubernetes_applications"
+  for_each = var.kubernetes_applications
   kubernetes_cluster_host = module.kubernetes_cluster.kubernetes_cluster_host
   kubernetes_cluster_username = module.kubernetes_cluster.kubernetes_cluster_username
   kubernetes_cluster_password = module.kubernetes_cluster.kubernetes_cluster_password
-  application_name  = "nginix-sample"
-  application_label = "nginix.sample"
-  application_replica_count =2
-  container_image="nginx:1.7.8"
-  container_name = "nginix-sample"
-  container_port=80
+  application_name  = each.value.application_name
+  application_label = each.value.application_label
+  application_replica_count = each.value.application_replica_count
+  container_image= each.value.container_image
+  container_name = each.value.container_name 
+  container_port= each.value.container_port
+  providers = {
+    kubernetes=kubernetes
+  }
 }
 
