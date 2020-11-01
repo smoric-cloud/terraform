@@ -29,5 +29,6 @@ resource "google_compute_instance" "provisioning-master" {
     access_config {
     }
   }
- 
+
+  metadata_startup_script = file("${path.module}/scripts/ansimble-install.sh")
 }
