@@ -18,18 +18,28 @@ provider "google" {
   region  = var.region
 }
 
-provider "kubernetes" {
+module "network" {
+  source = "./modules/network"
+  project_id = var.project_id
+  region  = var.region  
+}
+
+module "compute_engines" {
+  source = "./modules/compute_engines"
+  project_id = var.project_id
+  region  = var.region
+  zone = var.zone
+  vpc_name=module.network.vpc_name
+  vpc_subnet_name=module.network.vpc_subnet_name
+}
+
+
+/*provider "kubernetes" {
   load_config_file = false
   host     = module.kubernetes_cluster.kubernetes_cluster_host
   username = module.kubernetes_cluster.kubernetes_cluster_username
   password = module.kubernetes_cluster.kubernetes_cluster_password
   insecure=true
-}
-
-module "network" {
-  source = "./modules/network"
-  project_id = var.project_id
-  region  = var.region
 }
 
 module "kubernetes_cluster" {
@@ -58,3 +68,4 @@ module "kubernetes_applications" {
   }
 }
 
+*/
