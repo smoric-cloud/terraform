@@ -24,3 +24,21 @@ resource "google_compute_subnetwork" "subnet" {
   network       = google_compute_network.vpc.name
   ip_cidr_range = "10.10.0.0/24"
 }
+
+
+resource "google_compute_firewall" "vpc" {
+  name    = "vpc-firewall"
+  network = google_compute_network.vpc.name
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "8080","22"]
+  }
+
+}
+
+
