@@ -39,3 +39,17 @@ resource "google_compute_firewall" "vpc" {
 }
 
 
+resource "google_dns_managed_zone" "zone" {
+  name        = "${var.project_id}-zone"
+  dns_name    = "private.example.com."
+  
+  visibility = "private"
+
+  private_visibility_config {
+    networks {
+      network_url = google_compute_network.vpc.id
+    }   
+  }
+}
+
+

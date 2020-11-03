@@ -7,3 +7,8 @@ output "vpc_subnet_name" {
   value       = google_compute_subnetwork.subnet.name
   description = "VPC SubNet Name"
 }
+
+output "vpc_zone_name" {
+  value       = google_dns_managed_zone.zone.name
+  description = "VPC DNS Zone Name"
+}
