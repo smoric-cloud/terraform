@@ -31,6 +31,8 @@ module "compute_engines" {
   zone = var.zone
   vpc_name=module.network.vpc_name
   vpc_subnet_name=module.network.vpc_subnet_name
+  vpc_zone_name=module.network.vpc_zone_name
+  vpc_zone_dns_name=module.network.vpc_zone_dns_name
 }
 
 

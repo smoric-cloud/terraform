@@ -41,7 +41,7 @@ resource "google_compute_firewall" "vpc" {
 
 resource "google_dns_managed_zone" "zone" {
   name        = "${var.project_id}-zone"
-  dns_name    = "private.example.com."
+  dns_name    = "morro.services.com."
   
   visibility = "private"
 

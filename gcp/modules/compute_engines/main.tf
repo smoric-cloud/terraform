@@ -33,6 +33,18 @@ resource "google_compute_instance" "provisioning-master" {
   metadata_startup_script = file("${path.module}/scripts/ansimble-install.sh")
 }
 
+resource "google_dns_record_set" "provisioning-master" {
+  name = "provisioning-master.${var.vpc_zone_dns_name}"
+  type = "A"
+  ttl  = 300
+
+  managed_zone = var.vpc_zone_name
+
+  rrdatas = [google_compute_instance.provisioning-master.network_interface[0].access_config[0].nat_ip]
+}
+
+
+
 resource "google_compute_instance" "jenkins-server" {
   name         = "jenkins-server"
   machine_type = "n1-standard-1"
@@ -51,4 +63,14 @@ resource "google_compute_instance" "jenkins-server" {
     access_config {
     }
   }
+}
+
+resource "google_dns_record_set" "jenkins-server" {
+  name = "jenkins-server.${var.vpc_zone_dns_name}"
+  type = "A"
+  ttl  = 300
+
+  managed_zone = var.vpc_zone_name
+
+  rrdatas = [google_compute_instance.jenkins-server.network_interface[0].access_config[0].nat_ip]
 }

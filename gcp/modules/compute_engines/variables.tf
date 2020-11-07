@@ -18,3 +18,10 @@ variable "vpc_subnet_name" {
   description = "VPC subnet name"
 }
 
+variable "vpc_zone_name" { 
+  description = "VPC DNS Zone Name"
+}
+
+variable "vpc_zone_dns_name" { 
+  description = "VPC DNS Zone DNS Name"
+}
