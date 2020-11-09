@@ -30,7 +30,8 @@ resource "google_compute_instance" "provisioning-master" {
     }
   }
 
-  metadata_startup_script = file("${path.module}/scripts/ansimble-install.sh")
+  metadata_startup_script = file("${path.module}/install-scripts/provisioning-master-install.sh")
+ 
 }
 
 resource "google_dns_record_set" "provisioning-master" {
