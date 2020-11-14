@@ -45,7 +45,6 @@ resource "google_dns_record_set" "provisioning-master" {
 }
 
 
-
 resource "google_compute_instance" "jenkins-server" {
   name         = "jenkins-server"
   machine_type = "n1-standard-1"
@@ -74,4 +73,35 @@ resource "google_dns_record_set" "jenkins-server" {
   managed_zone = var.vpc_zone_name
 
   rrdatas = [google_compute_instance.jenkins-server.network_interface[0].access_config[0].nat_ip]
+}
+
+
+resource "google_compute_instance" "web-server" {
+  name         = "web-server"
+  machine_type = "n1-standard-1"
+  zone         = var.zone
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-1604-xenial-v20201014"
+    }
+  }
+
+  network_interface {
+    network = var.vpc_name
+    subnetwork  = var.vpc_subnet_name
+    access_config {
+    }
+  }
+}
+
+resource "google_dns_record_set" "web-server" {
+  name = "web-server.${var.vpc_zone_dns_name}"
+  type = "A"
+  ttl  = 300
+
+  managed_zone = var.vpc_zone_name
+
+  rrdatas = [google_compute_instance.web-server.network_interface[0].access_config[0].nat_ip]
 }
